@@ -3,6 +3,8 @@ package devinhouse.elm.projetofinal.controllers;
 import java.util.Optional;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import org.hibernate.PropertyValueException;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.*;
@@ -21,9 +23,10 @@ public class AssuntoController {
         this.service = service;
     }
 
+    
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
-    public Assunto post(@RequestBody Assunto assunto) {
+    public Assunto post(@RequestBody Assunto assunto) throws PropertyValueException {
         return service.cadastrar(assunto);
     }
 
