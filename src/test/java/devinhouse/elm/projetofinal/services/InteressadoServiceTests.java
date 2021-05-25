@@ -3,6 +3,7 @@ package devinhouse.elm.projetofinal.services;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.persistence.Temporal;
@@ -26,16 +27,20 @@ public class InteressadoServiceTests {
     private InteressadoService service;
 
     @Test
-    public void deveDarFalhaAoCadastrarComIdExistente() {
-        var interessado = mock(Interessado.class);
-        when(repository.existsById(any())).thenReturn(true);
-
-        assertThrows(IdJaExisteException.class, () -> service.cadastrar(interessado));
-    }
-
-    @Test
     public void cadastrar() {
         var interessado = mock(Interessado.class);
 
+        service.cadastrar(interessado);
+
+        verify(repository).existsById(interessado.getId());
+        verify(repository).save(interessado);
+    }
+
+    @Test
+    public void deveDarFalhaAoCadastrarComIdExistente() {
+        var interessado = mock(Interessado.class);
+        when(repository.existsById(interessado.getId())).thenReturn(true);
+
+        assertThrows(IdJaExisteException.class, () -> service.cadastrar(interessado));
     }
 }

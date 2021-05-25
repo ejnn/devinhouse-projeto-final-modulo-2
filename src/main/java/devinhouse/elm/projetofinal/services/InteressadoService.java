@@ -18,6 +18,7 @@ public class InteressadoService {
     public Interessado cadastrar(Interessado interessado) throws IdJaExisteException {
         if (repository.existsById(interessado.getId()))
             throw new IdJaExisteException();
-        return null;
+
+        return repository.save(interessado);
     }
 }
