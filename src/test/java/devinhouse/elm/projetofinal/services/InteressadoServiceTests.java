@@ -5,6 +5,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import javax.persistence.Temporal;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,4 +33,9 @@ public class InteressadoServiceTests {
         assertThrows(IdJaExisteException.class, () -> service.cadastrar(interessado));
     }
 
+    @Test
+    public void cadastrar() {
+        var interessado = mock(Interessado.class);
+
+    }
 }
