@@ -28,7 +28,7 @@ public class Interessado {
     private String nome;
 
     @Column(nullable = false, name = "NUIDENTIFICACAO", length = 50)
-    private String numeroDeIdentificacao;
+    private String identificacao;
 
     @Column(nullable = false, name = "DTNASCIMENTO")
     private final LocalDateTime dataDeNascimento;
