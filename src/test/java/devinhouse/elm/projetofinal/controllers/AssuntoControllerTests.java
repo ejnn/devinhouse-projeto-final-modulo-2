@@ -34,14 +34,17 @@ public class AssuntoControllerTests {
 
 	private static WebTestClient webClient;
 
-	@MockBean private AssuntoService service;
-	@Autowired private AssuntoController controller;
+	@MockBean
+	private AssuntoService service;
+	@Autowired
+	private AssuntoController controller;
+	@Autowired
+	private MockMvc mvc;
 
 	@BeforeAll
 	public static void configuration(@Autowired MockMvc mvc) {
 		webClient = MockMvcWebTestClient.bindTo(mvc).build();
 	}
-
 
 	@Test
 	public void deveRetornarAccepted_QuandoRequisitarGetEmAssuntos() throws Exception {
@@ -83,7 +86,7 @@ public class AssuntoControllerTests {
 		when(service.buscarPorId(id)).thenReturn(assuntoEsperado);
 
 		webClient.get().uri("/assuntos/" + id).exchange();
-		
+
 		verify(service).buscarPorId(id);
 	}
 
