@@ -3,6 +3,8 @@ package devinhouse.elm.projetofinal.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+//import org.springframework.context.annotation.Import;
 
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
@@ -17,6 +19,7 @@ import static org.mockito.Mockito.*;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import devinhouse.elm.projetofinal.controllers.ProcessosController;
+import devinhouse.elm.projetofinal.controllers.GeneralControllerAdvice;
 import devinhouse.elm.projetofinal.services.ProcessosService;
 import devinhouse.elm.projetofinal.model.Processo;
 
@@ -26,6 +29,7 @@ import org.springframework.core.ParameterizedTypeReference;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.NoSuchElementException;
 
 
 @WebMvcTest(ProcessosController.class)
@@ -44,6 +48,7 @@ public class ProcessosControllerTests {
 
     @AfterEach
     public void resetMocks() {
+	reset(controller);
 	reset(service);
     }
 
@@ -96,5 +101,18 @@ public class ProcessosControllerTests {
 	    .expectStatus().isOk()
 	    .expectHeader().contentType(APPLICATION_JSON)
 	    .expectBody(Processo.class).isEqualTo(processoEsperado);
+    }
+
+    @Test
+    public void getPorIdInexistenteFalha() {
+
+	var id = 1;
+	when(service.buscarPorId(id)).thenReturn(Optional.empty());
+
+	var resposta = webClient.get()
+	     .uri("/processos/" + id)
+	     .exchange();
+
+	resposta.expectStatus().isNotFound();
     }
 }
