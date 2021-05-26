@@ -25,6 +25,7 @@ import devinhouse.elm.projetofinal.exceptions.*;
 import org.springframework.core.ParameterizedTypeReference;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @WebMvcTest(ProcessosController.class)
@@ -74,8 +75,26 @@ public class ProcessosControllerTests {
 	    .uri("/processos")
 	    .exchange();
 
-	resposta.expectStatus().isOk();
-	resposta.expectHeader().contentType(APPLICATION_JSON);
-	resposta.expectBody(new ParameterizedTypeReference<List<Processo>>() {} ).isEqualTo(listaEsperada);
+	resposta
+	    .expectStatus().isOk()
+	    .expectHeader().contentType(APPLICATION_JSON)
+	    .expectBody(new ParameterizedTypeReference<List<Processo>>() {}).isEqualTo(listaEsperada);
+    }
+
+    @Test
+    public void getPorId() {
+
+	var id = 1;
+	var processoEsperado = new Processo();
+	when(service.buscarPorId(id)).thenReturn(Optional.of(processoEsperado));
+
+	var resposta = webClient.get()
+	    .uri("/processos/" + id)
+	    .exchange();
+
+	resposta
+	    .expectStatus().isOk()
+	    .expectHeader().contentType(APPLICATION_JSON)
+	    .expectBody(Processo.class).isEqualTo(processoEsperado);
     }
 }

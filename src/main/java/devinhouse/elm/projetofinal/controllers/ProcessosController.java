@@ -7,6 +7,8 @@ import devinhouse.elm.projetofinal.services.ProcessosService;
 import devinhouse.elm.projetofinal.model.Processo;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.NoSuchElementException;
 
 
 @RestController
@@ -30,5 +32,12 @@ public class ProcessosController {
     @ResponseStatus(OK)
     public List<Processo> get() {
 	return service.listarTodos();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(OK)
+    public Processo getPorId(@PathVariable int id) throws NoSuchElementException {
+	Optional<Processo> processo = service.buscarPorId(id);
+	return processo.get();
     }
 }

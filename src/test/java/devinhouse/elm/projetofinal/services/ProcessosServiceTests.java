@@ -22,6 +22,7 @@ import devinhouse.elm.projetofinal.model.Processo;
 import devinhouse.elm.projetofinal.exceptions.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -70,5 +71,17 @@ public class ProcessosServiceTests {
 	var listaRecebida = service.listarTodos();
 
 	assertEquals(listaEsperada, listaRecebida);
+    }
+
+    @Test
+    public void buscarPorId() {
+
+	var processoEsperado = Optional.of(new Processo());
+	var id = 1;
+	when(repository.findById(id)).thenReturn(processoEsperado);
+
+	var processoRecebido = service.buscarPorId(id);
+
+	assertEquals(processoEsperado, processoRecebido);
     }
 }

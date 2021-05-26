@@ -9,6 +9,7 @@ import devinhouse.elm.projetofinal.exceptions.*;
 
 import java.time.Year;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -41,5 +42,9 @@ public class ProcessosService {
 
     public List<Processo> listarTodos() {
 	return repository.findAll();
+    }
+
+    public Optional<Processo> buscarPorId(int id) {
+	return repository.findById(id);
     }
 }
