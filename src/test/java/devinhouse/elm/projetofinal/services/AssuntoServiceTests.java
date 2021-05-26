@@ -28,7 +28,7 @@ public class AssuntoServiceTests {
 	@Test
     public void cadastrar() {
 
-		var assunto = mock(Assunto.class);
+		var assunto = new Assunto();
 
 		service.cadastrar(assunto);
 
@@ -38,7 +38,7 @@ public class AssuntoServiceTests {
 	@Test
     public void cadastrarFalhaComIdExistente() {
 
-		var assunto = mock(Assunto.class);
+		var assunto = new Assunto();
 		when(repository.existsById(any())).thenReturn(true);
 
 		assertThrows(IdJaExisteException.class, () -> service.cadastrar(assunto));
@@ -48,7 +48,7 @@ public class AssuntoServiceTests {
 	public void buscarPorId(){
 
 		var id = 1L;
-		var assuntoEsperado = Optional.of(mock(Assunto.class));
+		var assuntoEsperado = Optional.of(new Assunto());
 		when(repository.findById(any())).thenReturn(assuntoEsperado);
 
 		var assuntoRecebido = service.buscarPorId(id);
