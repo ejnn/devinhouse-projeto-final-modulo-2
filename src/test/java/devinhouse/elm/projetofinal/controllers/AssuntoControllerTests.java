@@ -26,20 +26,21 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @WebMvcTest(AssuntoController.class)
 public class AssuntoControllerTests {
 
-	@SpyBean AssuntoController controller;
 	private static WebTestClient webClient;
-
-    @BeforeAll
+	
+	@BeforeAll
     public static void setupWebClient(@Autowired MockMvc mvc) {
-    // @AutoConfigureWebTestClient is WebFlux exclusive atm...
-    webClient = MockMvcWebTestClient.bindTo(mvc).build();
+		// @AutoConfigureWebTestClient is WebFlux exclusive atm...
+		webClient = MockMvcWebTestClient.bindTo(mvc).build();
     }
-
+	
     @MockBean private AssuntoService service;
-
+	@SpyBean private AssuntoController controller;
+	
     @AfterEach
     public void resetMocks() {
     	reset(service);
+		reset(controller);
     }
 
 
