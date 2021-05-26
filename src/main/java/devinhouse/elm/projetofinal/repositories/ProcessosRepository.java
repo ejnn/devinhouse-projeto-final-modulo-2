@@ -8,4 +8,6 @@ import devinhouse.elm.projetofinal.model.Processo;
 
 @Repository
 public interface ProcessosRepository extends JpaRepository<Processo, Integer> {
+    int countBySiglaEquals(String sigla);
+    boolean existsByChave(String chave);
 }

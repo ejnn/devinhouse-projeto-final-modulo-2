@@ -17,10 +17,10 @@ import java.time.Year;
 public class Processo {
 
     @Column(name = "ID", nullable = false)
-    @Id @GeneratedValue(strategy = IDENTITY) @Setter(NONE) private int id;
+    @Id @GeneratedValue(strategy = IDENTITY) private int id;
 
     @Column(name = "NUPROCESSO", nullable = false) private int numero;
-    @Column(name = "SGORGAOSETOR", length = 4, nullable = false) private String siglaOrgaoSetor;
+    @Column(name = "SGORGAOSETOR", length = 4, nullable = false) private String sigla;
     @Column(name = "NUANO", length = 4, nullable = false) private Year ano;
     @Column(name = "CHAVEPROCESSO", length = 250, unique = true, nullable = false) private String chave;
     @Column(name = "DESCRICAO", length = 250, nullable = false) private String descricao;
