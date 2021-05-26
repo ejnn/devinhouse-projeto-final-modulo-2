@@ -22,21 +22,24 @@ import devinhouse.elm.projetofinal.model.Processo;
 
 import devinhouse.elm.projetofinal.exceptions.*;
 
+import org.springframework.core.ParameterizedTypeReference;
+
+import java.util.List;
+
 
 @WebMvcTest(ProcessosController.class)
 public class ProcessosControllerTests {
 
     private static WebTestClient webClient;
 
-    // @Autowired private MockMvc mvc;
-    @MockBean private ProcessosService service;
-
-
     @BeforeAll
     public static void setupWebClient(@Autowired MockMvc mvc) {
 	// @AutoConfigureWebTestClient is WebFlux exclusive atm...
 	webClient = MockMvcWebTestClient.bindTo(mvc).build();
     }
+
+
+    @MockBean private ProcessosService service;
 
     @AfterEach
     public void resetMocks() {
@@ -50,13 +53,29 @@ public class ProcessosControllerTests {
 	var processoEsperado = new Processo();
 	when(service.cadastrar(any())).thenReturn(processoEsperado);
 
-	var response = webClient.post()
+	var resposta = webClient.post()
 	    .uri("/processos")
 	    .contentType(APPLICATION_JSON)
 	    .bodyValue(processoEsperado)
 	    .exchange();
 
-	response.expectBody(Processo.class).isEqualTo(processoEsperado);
-	response.expectStatus().isCreated();
+	resposta.expectStatus().isCreated();
+	resposta.expectHeader().contentType(APPLICATION_JSON);
+	resposta.expectBody(Processo.class).isEqualTo(processoEsperado);
+    }
+
+    @Test
+    public void get() {
+
+	var listaEsperada = List.of(new Processo());
+	when(service.listarTodos()).thenReturn(listaEsperada);
+
+	var resposta = webClient.get()
+	    .uri("/processos")
+	    .exchange();
+
+	resposta.expectStatus().isOk();
+	resposta.expectHeader().contentType(APPLICATION_JSON);
+	resposta.expectBody(new ParameterizedTypeReference<List<Processo>>() {} ).isEqualTo(listaEsperada);
     }
 }

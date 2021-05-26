@@ -8,9 +8,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.*;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
+import org.mockito.InjectMocks;
 
 import devinhouse.elm.projetofinal.services.ProcessosService;
 import devinhouse.elm.projetofinal.repositories.ProcessosRepository;
@@ -18,30 +21,14 @@ import devinhouse.elm.projetofinal.model.Processo;
 
 import devinhouse.elm.projetofinal.exceptions.*;
 
+import java.util.List;
 
-@SpringBootTest
+
+@ExtendWith(MockitoExtension.class)
 public class ProcessosServiceTests {
 
-    @Configuration
-    static class Config {
-
-	@Bean
-	public ProcessosService processosService() {
-	    return new ProcessosService(processosRepository());
-	}
-
-	@Bean ProcessosRepository processosRepository() {
-	    return mock(ProcessosRepository.class);
-	}
-    }
-
-    @Autowired private ProcessosService service;
-    @Autowired private ProcessosRepository repository;
-
-    @AfterEach
-    public void resetMocks() {
-	reset(repository);
-    }
+    @InjectMocks private ProcessosService service;
+    @Mock private ProcessosRepository repository;
 
 
     @Test
@@ -72,5 +59,16 @@ public class ProcessosServiceTests {
 	var processo = new Processo();
 
 	assertThrows(ChaveJaExisteException.class, () -> service.cadastrar(processo));
+    }
+
+    @Test
+    public void listarTodos() {
+
+	var listaEsperada = List.of(new Processo());
+	when(repository.findAll()).thenReturn(listaEsperada);
+
+	var listaRecebida = service.listarTodos();
+
+	assertEquals(listaEsperada, listaRecebida);
     }
 }

@@ -6,6 +6,8 @@ import static org.springframework.http.HttpStatus.*;
 import devinhouse.elm.projetofinal.services.ProcessosService;
 import devinhouse.elm.projetofinal.model.Processo;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/processos")
@@ -22,5 +24,11 @@ public class ProcessosController {
     @ResponseStatus(CREATED)
     public Processo post(@RequestBody Processo processo) {
 	return service.cadastrar(processo);
+    }
+
+    @GetMapping
+    @ResponseStatus(OK)
+    public List<Processo> get() {
+	return service.listarTodos();
     }
 }

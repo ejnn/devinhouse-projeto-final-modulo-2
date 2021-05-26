@@ -8,6 +8,7 @@ import devinhouse.elm.projetofinal.model.Processo;
 import devinhouse.elm.projetofinal.exceptions.*;
 
 import java.time.Year;
+import java.util.List;
 
 
 @Service
@@ -36,5 +37,9 @@ public class ProcessosService {
 	processo.setChave(chave);
 
 	return repository.save(processo);
+    }
+
+    public List<Processo> listarTodos() {
+	return repository.findAll();
     }
 }
