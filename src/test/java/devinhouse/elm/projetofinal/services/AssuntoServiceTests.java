@@ -4,25 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.Mockito.*;
 
-import devinhouse.elm.projetofinal.exceptions.IdJaExisteException;
 import devinhouse.elm.projetofinal.model.Assunto;
 import devinhouse.elm.projetofinal.repositories.AssuntoRepository;
 
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class AssuntoServiceTests {
 
-	@MockBean private AssuntoRepository repository;
-
-	@Autowired private AssuntoService service;
+	@Mock private AssuntoRepository repository;
+	@InjectMocks private AssuntoService service;
 
 
 	@Test
@@ -33,15 +33,6 @@ public class AssuntoServiceTests {
 		service.cadastrar(assunto);
 
 		verify(repository).save(any(Assunto.class));
-    }
-
-	@Test
-    public void cadastrarFalhaComIdExistente() {
-
-		var assunto = new Assunto();
-		when(repository.existsById(any())).thenReturn(true);
-
-		assertThrows(IdJaExisteException.class, () -> service.cadastrar(assunto));
     }
 
 	@Test

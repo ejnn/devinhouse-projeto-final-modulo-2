@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import devinhouse.elm.projetofinal.exceptions.IdJaExisteException;
 import devinhouse.elm.projetofinal.repositories.AssuntoRepository;
 import devinhouse.elm.projetofinal.model.Assunto;
 
@@ -20,10 +19,7 @@ public class AssuntoService {
     }
 
 
-    public Assunto cadastrar(Assunto assunto) throws IdJaExisteException {
-
-        if (repository.existsById(assunto.getId())) throw new IdJaExisteException();
-
+    public Assunto cadastrar(Assunto assunto) {
         return repository.save(assunto);
     }
 

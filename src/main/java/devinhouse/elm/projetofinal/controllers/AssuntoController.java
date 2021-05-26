@@ -37,7 +37,7 @@ public class AssuntoController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(ACCEPTED)
+    @ResponseStatus(OK)
     public Assunto getPorId(@PathVariable long id) throws NoSuchElementException {
         Optional<Assunto> assunto = service.buscarPorId(id);
         return assunto.get();

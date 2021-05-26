@@ -10,11 +10,12 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.hibernate.PropertyValueException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -22,18 +23,25 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(AssuntoController.class)
 public class AssuntoControllerTests {
 
+	@SpyBean AssuntoController controller;
 	private static WebTestClient webClient;
 
-	@MockBean private AssuntoService service;
+    @BeforeAll
+    public static void setupWebClient(@Autowired MockMvc mvc) {
+    // @AutoConfigureWebTestClient is WebFlux exclusive atm...
+    webClient = MockMvcWebTestClient.bindTo(mvc).build();
+    }
 
-	@BeforeAll
-	public static void configuration(@Autowired MockMvc mvc) {
-		webClient = MockMvcWebTestClient.bindTo(mvc).build();
-	}
+    @MockBean private AssuntoService service;
+
+    @AfterEach
+    public void resetMocks() {
+    	reset(service);
+    }
+
 
 	@Test
 	public void post(){
@@ -50,6 +58,20 @@ public class AssuntoControllerTests {
 		.expectBody(Assunto.class)
 		.isEqualTo(assunto);
 		
+	}
+
+	@Test
+	public void postReturnBAD_REQUEST(){
+
+		var assunto = new Assunto();
+		when(controller.post(assunto)).thenThrow(PropertyValueException.class);
+
+		webClient.post()
+		.uri("/assuntos")
+		.contentType(APPLICATION_JSON)
+		.bodyValue(assunto)
+		.exchange()
+		.expectStatus().isBadRequest();
 	}
 
 	@Test
@@ -100,7 +122,7 @@ public class AssuntoControllerTests {
 	}
 
 	@Test
-	public void getPorIdReturnACCEPTED(){
+	public void getPorIdReturnOK(){
 
 		var id = 1L;
 		var assunto = new Assunto();
@@ -109,6 +131,6 @@ public class AssuntoControllerTests {
 		webClient.get()
 		.uri("/assuntos/" + id)
 		.exchange()
-		.expectStatus().isAccepted();
+		.expectStatus().isOk();
 	}
 }
