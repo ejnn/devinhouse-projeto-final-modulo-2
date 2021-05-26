@@ -14,7 +14,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 
-import devinhouse.elm.projetofinal.exceptions.IdentificacaoJaExisteException;
 import devinhouse.elm.projetofinal.model.Interessado;
 import devinhouse.elm.projetofinal.services.InteressadoService;
 
@@ -42,7 +41,8 @@ public class InteressadoControllerTests {
                 .expectBody(Interessado.class).isEqualTo(interessado);
     }
 
-    // @Test
+    // @Test // TODO: não estou conseguindo fazer rodar esse teste, se acharem
+    // interessante, podem me dar uma manzinha, se não deixo ele de lado.
     // public void deveDarFalhaAoCadastrarComIdentificacaoExistente() {
     // var interessado = new Interessado();
     // when(service.cadastrar(interessado)).thenThrow(IdentificacaoJaExisteException.class);
