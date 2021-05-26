@@ -10,22 +10,22 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import devinhouse.elm.projetofinal.exceptions.IdJaExisteException;
 import devinhouse.elm.projetofinal.exceptions.IdentificacaoJaExisteException;
 import devinhouse.elm.projetofinal.model.Interessado;
 import devinhouse.elm.projetofinal.repositories.InteressadoRepository;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class InteressadoServiceTests {
 
-    @MockBean
+    @Mock
     private InteressadoRepository repository;
 
-    @Autowired
+    @InjectMocks
     private InteressadoService service;
 
     @Test

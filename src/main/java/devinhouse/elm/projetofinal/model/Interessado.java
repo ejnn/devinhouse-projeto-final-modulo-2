@@ -31,7 +31,7 @@ public class Interessado {
     private String identificacao;
 
     @Column(nullable = false, name = "DTNASCIMENTO")
-    private final LocalDateTime dataDeNascimento;
+    private LocalDateTime dataDeNascimento;
 
     @Column(nullable = false, name = "FLATIVO")
     private boolean ativo = true;

@@ -9,7 +9,6 @@ import devinhouse.elm.projetofinal.exceptions.IdJaExisteException;
 import devinhouse.elm.projetofinal.repositories.AssuntoRepository;
 import devinhouse.elm.projetofinal.model.Assunto;
 
-
 @Service
 public class AssuntoService {
 
@@ -19,10 +18,10 @@ public class AssuntoService {
         this.repository = repository;
     }
 
-
     public Assunto cadastrar(Assunto assunto) throws IdJaExisteException {
 
-        if (repository.existsById(assunto.getId())) throw new IdJaExisteException();
+        if (repository.existsById(assunto.getId()))
+            throw new IdJaExisteException();
 
         return repository.save(assunto);
     }
