@@ -6,6 +6,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -55,20 +58,41 @@ public class InteressadoServiceTests {
     @Test
     public void obterPorId() {
         var interessadoEsperado = mock(Interessado.class);
-        when(repository.getById(interessadoEsperado.getId())).thenReturn(interessadoEsperado);
+        when(repository.findById(interessadoEsperado.getId())).thenReturn(Optional.of(interessadoEsperado));
 
         var interessadoRetorno = service.obterPorId(interessadoEsperado.getId());
 
-        assertSame(interessadoEsperado, interessadoRetorno);
+        assertSame(interessadoEsperado, interessadoRetorno.get());
+    }
+
+    @Test
+    public void deveDarFalhaAoObterPorIdQueNaoExiste() {
+        var interessado = mock(Interessado.class);
+        when(repository.findById(interessado.getId())).thenReturn(Optional.empty());
+
+        var interessadoRetorno = service.obterPorId(interessado.getId());
+
+        assertThrows(NoSuchElementException.class, () -> interessadoRetorno.get());
     }
 
     @Test
     public void obterPorIdentificacao() {
         var interessadoEsperado = mock(Interessado.class);
-        when(repository.getByIdentificacao(interessadoEsperado.getIdentificacao())).thenReturn(interessadoEsperado);
+        when(repository.findByIdentificacao(interessadoEsperado.getIdentificacao()))
+                .thenReturn(Optional.of(interessadoEsperado));
 
         var interessadoRetorno = service.obterPorIdentificacao(interessadoEsperado.getIdentificacao());
 
-        assertSame(interessadoEsperado, interessadoRetorno);
+        assertSame(interessadoEsperado, interessadoRetorno.get());
+    }
+
+    @Test
+    public void deveDarFalhaAoObterPorIdentificacaoQueNaoExiste() {
+        var interessadoEsperado = mock(Interessado.class);
+        when(repository.findByIdentificacao(interessadoEsperado.getIdentificacao())).thenReturn(Optional.empty());
+
+        var interessadoRetorno = service.obterPorIdentificacao(interessadoEsperado.getIdentificacao());
+
+        assertThrows(NoSuchElementException.class, () -> interessadoRetorno.get());
     }
 }

@@ -1,5 +1,7 @@
 package devinhouse.elm.projetofinal.services;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import devinhouse.elm.projetofinal.exceptions.IdJaExisteException;
@@ -26,11 +28,11 @@ public class InteressadoService {
         return repository.save(interessado);
     }
 
-    public Interessado obterPorId(Long id) {
-        return repository.getById(id);
+    public Optional<Interessado> obterPorId(Long id) {
+        return repository.findById(id);
     }
 
-    public Interessado obterPorIdentificacao(String identificacao) {
-        return repository.getByIdentificacao(identificacao);
+    public Optional<Interessado> obterPorIdentificacao(String identificacao) {
+        return repository.findByIdentificacao(identificacao);
     }
 }
