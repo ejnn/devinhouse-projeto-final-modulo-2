@@ -1,5 +1,6 @@
 package devinhouse.elm.projetofinal.services;
 
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -49,5 +50,25 @@ public class InteressadoServiceTests {
         when(repository.existsByIdentificacao(interessado.getIdentificacao())).thenReturn(true);
 
         assertThrows(IdentificacaoJaExisteException.class, () -> service.cadastrar(interessado));
+    }
+
+    @Test
+    public void obterPorId() {
+        var interessadoEsperado = mock(Interessado.class);
+        when(repository.getById(interessadoEsperado.getId())).thenReturn(interessadoEsperado);
+
+        var interessadoRetorno = service.obterPorId(interessadoEsperado.getId());
+
+        assertSame(interessadoEsperado, interessadoRetorno);
+    }
+
+    @Test
+    public void obterPorIdentificacao() {
+        var interessadoEsperado = mock(Interessado.class);
+        when(repository.getByIdentificacao(interessadoEsperado.getIdentificacao())).thenReturn(interessadoEsperado);
+
+        var interessadoRetorno = service.obterPorIdentificacao(interessadoEsperado.getIdentificacao());
+
+        assertSame(interessadoEsperado, interessadoRetorno);
     }
 }

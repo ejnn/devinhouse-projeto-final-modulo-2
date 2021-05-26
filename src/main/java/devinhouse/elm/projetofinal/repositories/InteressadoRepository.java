@@ -6,4 +6,6 @@ import devinhouse.elm.projetofinal.model.Interessado;
 
 public interface InteressadoRepository extends JpaRepository<Interessado, Long> {
     boolean existsByIdentificacao(String identificacao);
+
+    Interessado getByIdentificacao(String identificacao);
 }

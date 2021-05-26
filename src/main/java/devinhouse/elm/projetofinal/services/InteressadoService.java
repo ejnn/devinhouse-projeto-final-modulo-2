@@ -25,4 +25,12 @@ public class InteressadoService {
 
         return repository.save(interessado);
     }
+
+    public Interessado obterPorId(Long id) {
+        return repository.getById(id);
+    }
+
+    public Interessado obterPorIdentificacao(String identificacao) {
+        return repository.getByIdentificacao(identificacao);
+    }
 }
