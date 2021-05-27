@@ -48,7 +48,6 @@ public class ProcessosControllerTests {
 
     @AfterEach
     public void resetMocks() {
-	reset(controller);
 	reset(service);
     }
 
@@ -66,7 +65,6 @@ public class ProcessosControllerTests {
 	    .exchange();
 
 	resposta.expectStatus().isCreated();
-	resposta.expectHeader().contentType(APPLICATION_JSON);
 	resposta.expectBody(Processo.class).isEqualTo(processoEsperado);
     }
 
@@ -82,7 +80,6 @@ public class ProcessosControllerTests {
 
 	resposta
 	    .expectStatus().isOk()
-	    .expectHeader().contentType(APPLICATION_JSON)
 	    .expectBody(new ParameterizedTypeReference<List<Processo>>() {}).isEqualTo(listaEsperada);
     }
 
@@ -99,7 +96,6 @@ public class ProcessosControllerTests {
 
 	resposta
 	    .expectStatus().isOk()
-	    .expectHeader().contentType(APPLICATION_JSON)
 	    .expectBody(Processo.class).isEqualTo(processoEsperado);
     }
 
@@ -114,5 +110,22 @@ public class ProcessosControllerTests {
 	     .exchange();
 
 	resposta.expectStatus().isNotFound();
+    }
+
+    @Test
+    public void getPorChave() {
+
+	var chave = "AAA";
+	var listaEsperada = List.of(new Processo());
+	when(service.buscarPorChave(chave)).thenReturn(listaEsperada);
+
+	var resposta = webClient.get()
+	    .uri("/processos?chave=" + chave)
+	    .exchange();
+
+	resposta
+	    .expectStatus().isOk()
+	    .expectBody(new ParameterizedTypeReference<List<Processo>>() {}).isEqualTo(listaEsperada);
+	    
     }
 }

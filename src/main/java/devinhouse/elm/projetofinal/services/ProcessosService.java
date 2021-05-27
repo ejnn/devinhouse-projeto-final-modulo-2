@@ -47,4 +47,8 @@ public class ProcessosService {
     public Optional<Processo> buscarPorId(int id) {
 	return repository.findById(id);
     }
+
+    public List<Processo> buscarPorChave(String chave) {
+	return repository.findByChaveContains(chave);
+    }
 }

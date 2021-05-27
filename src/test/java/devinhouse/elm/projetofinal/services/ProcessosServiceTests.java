@@ -84,4 +84,14 @@ public class ProcessosServiceTests {
 
 	assertEquals(processoEsperado, processoRecebido);
     }
+
+    @Test
+    public void buscarPorChave() {
+
+	var chave = "AAA";
+
+	service.buscarPorChave(chave);
+
+	verify(repository).findByChaveContains(chave);
+    }
 }

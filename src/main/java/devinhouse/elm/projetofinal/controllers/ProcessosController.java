@@ -40,4 +40,10 @@ public class ProcessosController {
 	Optional<Processo> processo = service.buscarPorId(id);
 	return processo.get();
     }
+
+    @GetMapping(params = "chave")
+    @ResponseStatus(OK)
+    public List<Processo> getPorChave(@RequestParam String chave) {
+	return service.buscarPorChave(chave);
+    }
 }
