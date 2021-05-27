@@ -14,15 +14,8 @@ import java.time.LocalDate;
 @Data
 @Entity
 public class Assunto {
-
-    @Id 
-    @GeneratedValue(strategy = IDENTITY) 
-    @JsonProperty(access = READ_ONLY) private long id;
-
+    @Id @GeneratedValue(strategy = IDENTITY) private long id;
     @Column(nullable=false, name = "DESCRICAO", length = 250) private String descricao;
-
-    @Column(nullable=false, name = "DTCADASTRO") @JsonProperty(access = READ_ONLY) 
-    private final LocalDate dataCadastro = LocalDate.now();
-
+    @Column(nullable=false, name = "DTCADASTRO") private LocalDate dataCadastro;
     @Column(nullable=false, name = "FLATIVO") private boolean ativo = true;
 }
