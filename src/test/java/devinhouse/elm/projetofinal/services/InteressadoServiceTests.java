@@ -15,9 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import devinhouse.elm.projetofinal.exceptions.IdJaExisteException;
+import devinhouse.elm.projetofinal.exceptions.IdentificacaoInvalidaException;
 import devinhouse.elm.projetofinal.exceptions.IdentificacaoJaExisteException;
 import devinhouse.elm.projetofinal.model.Interessado;
 import devinhouse.elm.projetofinal.repositories.InteressadoRepository;
+import devinhouse.elm.projetofinal.validator.IdentificacaoValidator;
 
 @ExtendWith(MockitoExtension.class)
 public class InteressadoServiceTests {
@@ -25,17 +27,22 @@ public class InteressadoServiceTests {
     @Mock
     private InteressadoRepository repository;
 
+    @Mock
+    private IdentificacaoValidator validator;
+
     @InjectMocks
     private InteressadoService service;
 
     @Test
     public void cadastrar() {
         var interessado = mock(Interessado.class);
+        when(validator.isValid(interessado.getIdentificacao())).thenReturn(true);
 
         service.cadastrar(interessado);
 
         verify(repository).existsById(interessado.getId());
         verify(repository).existsByIdentificacao(interessado.getIdentificacao());
+        verify(validator).isValid(interessado.getIdentificacao());
         verify(repository).save(interessado);
     }
 
@@ -53,6 +60,14 @@ public class InteressadoServiceTests {
         when(repository.existsByIdentificacao(interessado.getIdentificacao())).thenReturn(true);
 
         assertThrows(IdentificacaoJaExisteException.class, () -> service.cadastrar(interessado));
+    }
+
+    @Test
+    public void deveDarFalhaAoCadastrarComIdentificacaoInvalida() {
+        var interessado = mock(Interessado.class);
+        when(validator.isValid(interessado.getIdentificacao())).thenReturn(false);
+
+        assertThrows(IdentificacaoInvalidaException.class, () -> service.cadastrar(interessado));
     }
 
     @Test
