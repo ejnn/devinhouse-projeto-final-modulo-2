@@ -67,7 +67,7 @@ public class AssuntoControllerTests {
     }
 
 	@Test
-	public void controllerTrataViolacaoDeRestricoes(){
+	public void controllerTrataViolacaoDeRestricoes() {
 
 	    var assunto = new AssuntoCadastroDto();
 	    when(controller.post(assunto)).thenThrow(PropertyValueException.class);

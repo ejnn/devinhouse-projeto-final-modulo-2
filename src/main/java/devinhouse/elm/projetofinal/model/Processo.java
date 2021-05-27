@@ -16,9 +16,7 @@ import java.time.Year;
 @Data
 public class Processo {
 
-    @Column(name = "ID", nullable = false)
-    @Id @GeneratedValue(strategy = IDENTITY) @JsonProperty(access = READ_ONLY) private int id;
-
+    @Column(name = "ID", nullable = false) @Id @GeneratedValue(strategy = IDENTITY) private int id;
     @Column(name = "NUPROCESSO", nullable = false) private int numero;
     @Column(name = "SGORGAOSETOR", length = 4, nullable = false) private String sigla;
     @Column(name = "NUANO", length = 4, nullable = false) private Year ano;

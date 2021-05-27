@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-//import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Import;
+import devinhouse.elm.projetofinal.config.GeneralConfiguration;
 
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
@@ -33,6 +34,7 @@ import java.util.NoSuchElementException;
 
 
 @WebMvcTest(ProcessosController.class)
+@Import(GeneralConfiguration.class)
 public class ProcessosControllerTests {
 
     private static WebTestClient webClient;

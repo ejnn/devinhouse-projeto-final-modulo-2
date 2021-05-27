@@ -4,7 +4,10 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.HttpStatus.*;
 
 import devinhouse.elm.projetofinal.services.ProcessosService;
+import devinhouse.elm.projetofinal.dtos.ProcessoCadastroDto;
 import devinhouse.elm.projetofinal.model.Processo;
+
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,16 +19,18 @@ import java.util.NoSuchElementException;
 public class ProcessosController {
 
     private final ProcessosService service;
+    private final ModelMapper mapper;
 
-    public ProcessosController(ProcessosService service) {
+    public ProcessosController(ProcessosService service, ModelMapper mapper) {
 	this.service = service;
+	this.mapper = mapper;
     }
 
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Processo post(@RequestBody Processo processo) {
-	return service.cadastrar(processo);
+    public Processo post(@RequestBody ProcessoCadastroDto processo) {
+	return service.cadastrar(mapper.map(processo, Processo.class));
     }
 
     @GetMapping
