@@ -16,4 +16,10 @@ public class GeneralControllerAdvice {
     public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException exception) {
         return new ResponseEntity<>("Recurso inexistente!", NOT_FOUND);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handlePropertyValueException(PropertyValueException exception) {
+        return new ResponseEntity<>(
+            "Erro na propriedade \"" + exception.getPropertyName() + "\" (" + exception.getCause() + ").", BAD_REQUEST);
+    }
 }
