@@ -1,29 +1,32 @@
 package devinhouse.elm.projetofinal.controllers;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
-import devinhouse.elm.projetofinal.services.AssuntoService;
-import devinhouse.elm.projetofinal.model.Assunto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
+import devinhouse.elm.projetofinal.config.GeneralConfiguration;
 
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.hibernate.PropertyValueException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import org.junit.jupiter.api.*;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.hibernate.PropertyValueException;
+
+import devinhouse.elm.projetofinal.services.AssuntoService;
+import devinhouse.elm.projetofinal.model.Assunto;
+import devinhouse.elm.projetofinal.dtos.AssuntoCadastroDto;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 
 @WebMvcTest(AssuntoController.class)
+@Import(GeneralConfiguration.class)
 public class AssuntoControllerTests {
 
 	private static WebTestClient webClient;
@@ -44,35 +47,38 @@ public class AssuntoControllerTests {
     }
 
 
-	@Test
-	public void post(){
+    @Test
+    public void post(){
 
-		var assunto = new Assunto();
-		when(service.cadastrar(assunto)).thenReturn(assunto);
+	var assuntoEsperado = new Assunto();
+	when(service.cadastrar(any())).thenReturn(assuntoEsperado);
 
-		webClient.post()
-		.uri("/assuntos")
-		.contentType(APPLICATION_JSON)
-		.bodyValue(assunto)
-		.exchange()
-		.expectHeader().contentType(APPLICATION_JSON)
-		.expectBody(Assunto.class)
-		.isEqualTo(assunto);
+	var resposta = webClient.post()
+	    .uri("/assuntos")
+	    .contentType(APPLICATION_JSON)
+	    .bodyValue(new AssuntoCadastroDto())
+	    .exchange();
+
+	resposta
+	    .expectHeader().contentType(APPLICATION_JSON)
+	    .expectStatus().isCreated()
+	    .expectBody(Assunto.class).isEqualTo(assuntoEsperado);
 		
-	}
+    }
 
 	@Test
-	public void postReturnBAD_REQUEST(){
+	public void controllerTrataViolacaoDeRestricoes(){
 
-		var assunto = new Assunto();
-		when(controller.post(assunto)).thenThrow(PropertyValueException.class);
+	    var assunto = new AssuntoCadastroDto();
+	    when(controller.post(assunto)).thenThrow(PropertyValueException.class);
 
-		webClient.post()
+	    var resposta = webClient.post()
 		.uri("/assuntos")
 		.contentType(APPLICATION_JSON)
 		.bodyValue(assunto)
-		.exchange()
-		.expectStatus().isBadRequest();
+		.exchange();
+
+	    resposta.expectStatus().isBadRequest();
 	}
 
 	@Test
