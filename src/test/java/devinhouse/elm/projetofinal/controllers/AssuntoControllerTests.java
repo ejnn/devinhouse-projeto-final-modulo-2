@@ -1,49 +1,76 @@
 package devinhouse.elm.projetofinal.controllers;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
-import devinhouse.elm.projetofinal.services.AssuntoService;
-import devinhouse.elm.projetofinal.model.Assunto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
+import devinhouse.elm.projetofinal.config.GeneralConfiguration;
 
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import org.junit.jupiter.api.*;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.hibernate.PropertyValueException;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+import devinhouse.elm.projetofinal.services.AssuntoService;
+import devinhouse.elm.projetofinal.model.Assunto;
+import devinhouse.elm.projetofinal.dtos.AssuntoCadastroDto;
+
+import java.util.ArrayList;
+import java.util.Optional;
+
+@WebMvcTest(AssuntoController.class)
+@Import(GeneralConfiguration.class)
 public class AssuntoControllerTests {
 
 	private static WebTestClient webClient;
 
+	@BeforeAll
+	public static void setupWebClient(@Autowired MockMvc mvc) {
+		// @AutoConfigureWebTestClient is WebFlux exclusive atm...
+		webClient = MockMvcWebTestClient.bindTo(mvc).build();
+	}
+
 	@MockBean
 	private AssuntoService service;
+	@SpyBean
+	private AssuntoController controller;
 
-	@BeforeAll
-	public static void configuration(@Autowired MockMvc mvc) {
-		webClient = MockMvcWebTestClient.bindTo(mvc).build();
+	@AfterEach
+	public void resetMocks() {
+		reset(service);
+		reset(controller);
 	}
 
 	@Test
 	public void post() {
 
-		var assunto = new Assunto();
-		when(service.cadastrar(assunto)).thenReturn(assunto);
+		var assuntoEsperado = new Assunto();
+		when(service.cadastrar(any())).thenReturn(assuntoEsperado);
 
-		webClient.post().uri("/assuntos").contentType(APPLICATION_JSON).bodyValue(assunto).exchange().expectHeader()
-				.contentType(APPLICATION_JSON).expectBody(Assunto.class).isEqualTo(assunto);
+		var resposta = webClient.post().uri("/assuntos").contentType(APPLICATION_JSON)
+				.bodyValue(new AssuntoCadastroDto()).exchange();
 
+		resposta.expectHeader().contentType(APPLICATION_JSON).expectStatus().isCreated().expectBody(Assunto.class)
+				.isEqualTo(assuntoEsperado);
+
+	}
+
+	@Test
+
+	public void controllerTrataViolacaoDeRestricoes() {
+
+		var assunto = new AssuntoCadastroDto();
+		when(controller.post(assunto)).thenThrow(PropertyValueException.class);
+
+		var resposta = webClient.post().uri("/assuntos").contentType(APPLICATION_JSON).bodyValue(assunto).exchange();
+
+		resposta.expectStatus().isBadRequest();
 	}
 
 	@Test
@@ -79,12 +106,13 @@ public class AssuntoControllerTests {
 	}
 
 	@Test
-	public void getPorIdReturnACCEPTED() {
+
+	public void getPorIdReturnOK() {
 
 		var id = 1L;
 		var assunto = new Assunto();
 		when(service.buscarPorId(id)).thenReturn(Optional.of(assunto));
 
-		webClient.get().uri("/assuntos/" + id).exchange().expectStatus().isAccepted();
+		webClient.get().uri("/assuntos/" + id).exchange().expectStatus().isOk();
 	}
 }

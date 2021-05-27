@@ -16,8 +16,9 @@ public class GeneralControllerAdvice {
         return new ResponseEntity<>("Recurso inexistente!", NOT_FOUND);
     }
 
-    @ExceptionHandler(PropertyValueException.class)
+    @ExceptionHandler
     public ResponseEntity<String> handlePropertyValueException(PropertyValueException exception) {
-        return new ResponseEntity<>("Objeto inexistente!", NOT_ACCEPTABLE);
+        return new ResponseEntity<>(
+            "Erro na propriedade \"" + exception.getPropertyName() + "\" (" + exception.getCause() + ").", BAD_REQUEST);
     }
 }
