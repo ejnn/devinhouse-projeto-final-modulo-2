@@ -41,16 +41,6 @@ public class InteressadoControllerTests {
                 .expectBody(Interessado.class).isEqualTo(interessado);
     }
 
-    // @Test // TODO: não estou conseguindo fazer rodar esse teste, se acharem
-    // interessante, podem me dar uma manzinha, se não deixo ele de lado.
-    // public void deveDarFalhaAoCadastrarComIdentificacaoExistente() {
-    // var interessado = new Interessado();
-    // when(service.cadastrar(interessado)).thenThrow(IdentificacaoJaExisteException.class);
-
-    // webClient.post().uri("/interessado").contentType(MediaType.APPLICATION_JSON).bodyValue(interessado).exchange()
-    // .expectStatus().isBadRequest();
-    // }
-
     @Test
     public void pegarPorId() {
 
