@@ -20,6 +20,7 @@ import devinhouse.elm.projetofinal.services.ProcessosService;
 import devinhouse.elm.projetofinal.repositories.ProcessosRepository;
 import devinhouse.elm.projetofinal.model.Processo;
 import devinhouse.elm.projetofinal.model.Assunto;
+import devinhouse.elm.projetofinal.model.Interessado;
 
 import devinhouse.elm.projetofinal.exceptions.*;
 
@@ -80,6 +81,18 @@ public class ProcessosServiceTests {
 	when(repository.save(processo)).thenReturn(processo);
 
 	assertThrows(AssuntoInativoException.class, () -> service.cadastrar(processo));
+    }
+
+    @Test
+    public void cadastrarComInteressadoInativoFalha() {
+
+	var processo = new Processo();
+	var interessado = new Interessado();
+	interessado.setAtivo(false);
+	processo.setInteressado(interessado);
+	when(repository.save(processo)).thenReturn(processo);
+
+	assertThrows(InteressadoInativoException.class, () -> service.cadastrar(processo));
     }
 
     @Test

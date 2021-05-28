@@ -48,8 +48,13 @@ public class ProcessosService {
 	entityManager.refresh(processo);
 
 	var assunto = processo.getAssunto();
-	if (assunto != null) { // constraint violation tho
+	if (assunto != null) {
 	    if (!assunto.isAtivo()) throw new AssuntoInativoException();
+	}
+
+	var interessado = processo.getInteressado();
+	if (interessado != null) {
+	    if (!interessado.isAtivo()) throw new InteressadoInativoException();
 	}
 
 	return processo;
