@@ -16,22 +16,28 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import devinhouse.elm.projetofinal.model.Interessado;
+import devinhouse.elm.projetofinal.dtos.InteressadoCadastroDto;
 import devinhouse.elm.projetofinal.services.InteressadoService;
+
+import org.modelmapper.ModelMapper;
 
 @RestController
 @RequestMapping("/interessado")
 public class InteressadoController {
 
     private final InteressadoService service;
+    private final ModelMapper mapper;
 
-    public InteressadoController(InteressadoService service) {
+    public InteressadoController(InteressadoService service,
+				 ModelMapper mapper) {
         this.service = service;
+	this.mapper = mapper;
     }
 
     @ResponseStatus(CREATED)
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public Interessado post(@RequestBody Interessado interessado) {
-        return service.cadastrar(interessado);
+    public Interessado post(@RequestBody InteressadoCadastroDto interessado) {
+        return service.cadastrar(mapper.map(interessado, Interessado.class));
     }
 
     @ResponseStatus(OK)

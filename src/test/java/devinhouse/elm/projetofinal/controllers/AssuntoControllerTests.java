@@ -62,7 +62,6 @@ public class AssuntoControllerTests {
 	}
 
 	@Test
-
 	public void controllerTrataViolacaoDeRestricoes() {
 
 		var assunto = new AssuntoCadastroDto();

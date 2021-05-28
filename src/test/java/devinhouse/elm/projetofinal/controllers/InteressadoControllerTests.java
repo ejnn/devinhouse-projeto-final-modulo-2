@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
+import devinhouse.elm.projetofinal.config.GeneralConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -18,6 +20,7 @@ import devinhouse.elm.projetofinal.model.Interessado;
 import devinhouse.elm.projetofinal.services.InteressadoService;
 
 @WebMvcTest(InteressadoController.class)
+@Import(GeneralConfiguration.class)
 public class InteressadoControllerTests {
 
     private static WebTestClient webClient;
