@@ -151,4 +151,14 @@ public class ProcessosServiceTests {
 
 	assertEquals(listaEsperada, listaRecebida);
     }
+
+    @Test
+    public void excluirPorId() {
+
+	var processoId = 1;
+
+	service.excluirPorId(processoId);
+
+	verify(repository).deleteById(processoId);
+    }
 }

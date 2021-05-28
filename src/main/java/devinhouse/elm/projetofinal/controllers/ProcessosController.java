@@ -63,4 +63,10 @@ public class ProcessosController {
     public List<Processo> getPorInteressadoId(@RequestParam long interessadoId) {
 	return service.buscarPorInteressadoId(interessadoId);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(NO_CONTENT)
+    public void deletePorId(@PathVariable int id) {
+	service.excluirPorId(id);
+    }
 }

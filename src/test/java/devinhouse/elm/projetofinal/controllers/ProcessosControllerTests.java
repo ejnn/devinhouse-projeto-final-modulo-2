@@ -163,4 +163,16 @@ public class ProcessosControllerTests {
     	    .expectStatus().isOk()
     	    .expectBody(new ParameterizedTypeReference<List<Processo>>() {}).isEqualTo(listaEsperada);
     }
+
+    @Test
+    public void deletePorId() {
+
+	var processoId = 1;
+
+	var resposta = webClient.delete()
+	    .uri("/processos/" + processoId)
+	    .exchange();
+
+	resposta.expectStatus().isNoContent();
+    }
 }

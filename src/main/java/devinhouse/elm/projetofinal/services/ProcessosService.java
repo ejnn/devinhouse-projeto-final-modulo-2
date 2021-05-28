@@ -79,4 +79,8 @@ public class ProcessosService {
     public List<Processo> buscarPorInteressadoId(long id) {
 	return repository.findByInteressadoId(id);
     }
+
+    public void excluirPorId(int id) {
+	repository.deleteById(id);
+    }
 }
