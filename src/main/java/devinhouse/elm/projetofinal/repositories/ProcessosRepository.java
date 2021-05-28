@@ -15,4 +15,5 @@ public interface ProcessosRepository extends JpaRepository<Processo, Integer> {
     boolean existsByChave(String chave);
     List<Processo> findByChaveContains(String chave);
     List<Processo> findByAssuntoId(long id);
+    List<Processo> findByInteressadoId(long id);
 }

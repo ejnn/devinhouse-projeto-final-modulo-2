@@ -139,4 +139,16 @@ public class ProcessosServiceTests {
 
 	assertEquals(listaEsperada, listaRecebida);
     }
+
+    @Test
+    public void buscarPorInteressadoId() {
+
+	var interessadoId = 1l;
+	var listaEsperada = List.of(new Processo());
+	when(repository.findByInteressadoId(interessadoId)).thenReturn(listaEsperada);
+
+	var listaRecebida = service.buscarPorInteressadoId(interessadoId);
+
+	assertEquals(listaEsperada, listaRecebida);
+    }
 }

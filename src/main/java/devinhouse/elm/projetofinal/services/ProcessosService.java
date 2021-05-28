@@ -75,4 +75,8 @@ public class ProcessosService {
     public List<Processo> buscarPorAssuntoId(long id) {
 	return repository.findByAssuntoId(id);
     }
+
+    public List<Processo> buscarPorInteressadoId(long id) {
+	return repository.findByInteressadoId(id);
+    }
 }
