@@ -3,7 +3,6 @@ package devinhouse.elm.projetofinal.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Import;
 import devinhouse.elm.projetofinal.config.GeneralConfiguration;
 
@@ -63,7 +62,6 @@ public class ProcessosControllerTests {
 
 	var resposta = webClient.post()
 	    .uri("/processos")
-	    .contentType(APPLICATION_JSON)
 	    .bodyValue(processoEsperado)
 	    .exchange();
 
@@ -174,5 +172,19 @@ public class ProcessosControllerTests {
 	    .exchange();
 
 	resposta.expectStatus().isNoContent();
+    }
+
+    @Test
+    public void putPorId() {
+
+	var processoId = 1;
+	var processo = new Processo();
+
+	var resposta = webClient.put()
+	    .uri("/processos/" + processoId)
+	    .bodyValue(processo)
+	    .exchange();
+
+	resposta.expectStatus().isOk();
     }
 }

@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.*;
 
 import devinhouse.elm.projetofinal.services.ProcessosService;
 import devinhouse.elm.projetofinal.dtos.ProcessoCadastroDto;
+import devinhouse.elm.projetofinal.dtos.ProcessoAtualizacaoDto;
 import devinhouse.elm.projetofinal.model.Processo;
 
 import org.modelmapper.ModelMapper;
@@ -68,5 +69,16 @@ public class ProcessosController {
     @ResponseStatus(NO_CONTENT)
     public void deletePorId(@PathVariable int id) {
 	service.excluirPorId(id);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(OK)
+    public Processo put(@RequestBody ProcessoAtualizacaoDto atualizacao, @PathVariable int id) {
+
+	var processo = new Processo();
+	processo.setId(id);
+	mapper.map(atualizacao, processo);
+
+	return service.atualizar(processo);
     }
 }

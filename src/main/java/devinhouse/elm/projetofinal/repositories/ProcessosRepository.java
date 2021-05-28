@@ -11,7 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface ProcessosRepository extends JpaRepository<Processo, Integer> {
-    int countBySiglaEquals(String sigla);
+    int countDistinctBySiglaEquals(String sigla);
+    boolean existsBySigla(String sigla);
     boolean existsByChave(String chave);
     List<Processo> findByChaveContains(String chave);
     List<Processo> findByAssuntoId(long id);

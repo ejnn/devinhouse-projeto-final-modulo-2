@@ -1,10 +1,6 @@
 package devinhouse.elm.projetofinal.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Bean;
-
-import org.springframework.boot.test.context.SpringBootTest;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,6 +23,7 @@ import devinhouse.elm.projetofinal.exceptions.*;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 
 @ExtendWith(MockitoExtension.class)
 public class ProcessosServiceTests {
@@ -34,6 +31,7 @@ public class ProcessosServiceTests {
     @InjectMocks private ProcessosService service;
     @Mock private ProcessosRepository repository;
     @Mock private EntityManager _entityManager;
+    @Mock ModelMapper modelMapper;
 
 
     @Test
@@ -79,7 +77,6 @@ public class ProcessosServiceTests {
 	assunto.setAtivo(false);
 	processo.setAssunto(assunto);
 	when(repository.save(processo)).thenReturn(processo);
-
 	assertThrows(AssuntoInativoException.class, () -> service.cadastrar(processo));
     }
 
@@ -160,5 +157,16 @@ public class ProcessosServiceTests {
 	service.excluirPorId(processoId);
 
 	verify(repository).deleteById(processoId);
+    }
+
+    @Test
+    public void atualizar() {
+
+	var processo = new Processo();
+	when(repository.findById(any())).thenReturn(Optional.of(processo));
+
+	service.atualizar(processo);
+
+	verify(repository).save(processo);
     }
 }
