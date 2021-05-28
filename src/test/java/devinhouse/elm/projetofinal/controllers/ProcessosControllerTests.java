@@ -23,6 +23,7 @@ import devinhouse.elm.projetofinal.controllers.ProcessosController;
 import devinhouse.elm.projetofinal.controllers.GeneralControllerAdvice;
 import devinhouse.elm.projetofinal.services.ProcessosService;
 import devinhouse.elm.projetofinal.model.Processo;
+import devinhouse.elm.projetofinal.model.Assunto;
 
 import devinhouse.elm.projetofinal.exceptions.*;
 

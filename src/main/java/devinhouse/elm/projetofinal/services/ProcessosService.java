@@ -2,23 +2,30 @@ package devinhouse.elm.projetofinal.services;
 
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import devinhouse.elm.projetofinal.repositories.ProcessosRepository;
 import devinhouse.elm.projetofinal.model.Processo;
 
 import devinhouse.elm.projetofinal.exceptions.*;
 
+import javax.persistence.EntityManager;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 
 
 @Service
+@Transactional
 public class ProcessosService {
 
     private ProcessosRepository repository;
+    private EntityManager entityManager;
 
-    public ProcessosService(ProcessosRepository repository) {
+    public ProcessosService(ProcessosRepository repository,
+			    EntityManager entityManager) {
 	this.repository = repository;
+	this.entityManager = entityManager;
     }
 
 
@@ -37,7 +44,15 @@ public class ProcessosService {
 	processo.setAno(ano);
 	processo.setChave(chave);
 
-	return repository.save(processo);
+	processo = repository.save(processo);
+	entityManager.refresh(processo);
+
+	var assunto = processo.getAssunto();
+	if (assunto != null) { // constraint violation tho
+	    if (!assunto.isAtivo()) throw new AssuntoInativoException();
+	}
+
+	return processo;
     }
 
     public List<Processo> listarTodos() {

@@ -15,9 +15,11 @@ import static org.mockito.Mockito.*;
 import org.mockito.Mock;
 import org.mockito.InjectMocks;
 
+import javax.persistence.EntityManager;
 import devinhouse.elm.projetofinal.services.ProcessosService;
 import devinhouse.elm.projetofinal.repositories.ProcessosRepository;
 import devinhouse.elm.projetofinal.model.Processo;
+import devinhouse.elm.projetofinal.model.Assunto;
 
 import devinhouse.elm.projetofinal.exceptions.*;
 
@@ -30,16 +32,22 @@ public class ProcessosServiceTests {
 
     @InjectMocks private ProcessosService service;
     @Mock private ProcessosRepository repository;
+    @Mock private EntityManager _entityManager;
 
 
     @Test
     public void cadastrar() {
 
 	var processo = new Processo();
+	var processoEsperado = new Processo();
+	processoEsperado.setAssunto(new Assunto());
 
-	service.cadastrar(processo);
+	when(repository.save(processo)).thenReturn(processoEsperado);
+
+	var processoRecebido = service.cadastrar(processo);
 
 	verify(repository).save(processo);
+	assertEquals(processoEsperado, processoRecebido);
     }
 
     @Test
@@ -60,6 +68,18 @@ public class ProcessosServiceTests {
 	var processo = new Processo();
 
 	assertThrows(ChaveJaExisteException.class, () -> service.cadastrar(processo));
+    }
+
+    @Test
+    public void cadastrarComAssuntoInativoFalha() {
+
+	var processo = new Processo();
+	var assunto = new Assunto();
+	assunto.setAtivo(false);
+	processo.setAssunto(assunto);
+	when(repository.save(processo)).thenReturn(processo);
+
+	assertThrows(AssuntoInativoException.class, () -> service.cadastrar(processo));
     }
 
     @Test

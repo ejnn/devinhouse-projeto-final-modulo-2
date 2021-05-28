@@ -4,6 +4,7 @@ import lombok.*;
 import static lombok.AccessLevel.NONE;
 
 import javax.persistence.*;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,5 +23,6 @@ public class Processo {
     @Column(name = "NUANO", length = 4, nullable = false) private Year ano;
     @Column(name = "CHAVEPROCESSO", length = 250, unique = true, nullable = false) private String chave;
     @Column(name = "DESCRICAO", length = 250, nullable = false) private String descricao;
+    @JoinColumn(name = "CDASSUNTO", updatable = false, nullable = false) @ManyToOne(fetch = EAGER) private Assunto assunto;
     // TO DO: campos com assunto e interessados
 }
