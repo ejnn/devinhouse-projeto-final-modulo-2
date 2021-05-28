@@ -24,74 +24,61 @@ import devinhouse.elm.projetofinal.dtos.AssuntoCadastroDto;
 import java.util.ArrayList;
 import java.util.Optional;
 
-
 @WebMvcTest(AssuntoController.class)
 @Import(GeneralConfiguration.class)
 public class AssuntoControllerTests {
 
 	private static WebTestClient webClient;
-	
+
 	@BeforeAll
-    public static void setupWebClient(@Autowired MockMvc mvc) {
+	public static void setupWebClient(@Autowired MockMvc mvc) {
 		// @AutoConfigureWebTestClient is WebFlux exclusive atm...
 		webClient = MockMvcWebTestClient.bindTo(mvc).build();
-    }
-	
-    @MockBean private AssuntoService service;
-	@SpyBean private AssuntoController controller;
-	
-    @AfterEach
-    public void resetMocks() {
-    	reset(service);
+	}
+
+	@MockBean
+	private AssuntoService service;
+	@SpyBean
+	private AssuntoController controller;
+
+	@AfterEach
+	public void resetMocks() {
+		reset(service);
 		reset(controller);
-    }
+	}
 
+	@Test
+	public void post() {
 
-    @Test
-    public void post(){
+		var assuntoEsperado = new Assunto();
+		when(service.cadastrar(any())).thenReturn(assuntoEsperado);
 
-	var assuntoEsperado = new Assunto();
-	when(service.cadastrar(any())).thenReturn(assuntoEsperado);
+		var resposta = webClient.post().uri("/assuntos").contentType(APPLICATION_JSON)
+				.bodyValue(new AssuntoCadastroDto()).exchange();
 
-	var resposta = webClient.post()
-	    .uri("/assuntos")
-	    .contentType(APPLICATION_JSON)
-	    .bodyValue(new AssuntoCadastroDto())
-	    .exchange();
+		resposta.expectHeader().contentType(APPLICATION_JSON).expectStatus().isCreated().expectBody(Assunto.class)
+				.isEqualTo(assuntoEsperado);
 
-	resposta
-	    .expectHeader().contentType(APPLICATION_JSON)
-	    .expectStatus().isCreated()
-	    .expectBody(Assunto.class).isEqualTo(assuntoEsperado);
-		
-    }
+	}
 
 	@Test
 	public void controllerTrataViolacaoDeRestricoes() {
 
-	    var assunto = new AssuntoCadastroDto();
-	    when(controller.post(assunto)).thenThrow(PropertyValueException.class);
+		var assunto = new AssuntoCadastroDto();
+		when(controller.post(assunto)).thenThrow(PropertyValueException.class);
 
-	    var resposta = webClient.post()
-		.uri("/assuntos")
-		.contentType(APPLICATION_JSON)
-		.bodyValue(assunto)
-		.exchange();
+		var resposta = webClient.post().uri("/assuntos").contentType(APPLICATION_JSON).bodyValue(assunto).exchange();
 
-	    resposta.expectStatus().isBadRequest();
+		resposta.expectStatus().isBadRequest();
 	}
 
 	@Test
-	public void get(){
+	public void get() {
 
 		var listaEsperada = new ArrayList<Assunto>();
 		when(service.buscarTodos()).thenReturn(listaEsperada);
 
-		webClient.get()
-		.uri("/assuntos")
-		.exchange()
-		.expectBodyList(Assunto.class)
-		.isEqualTo(listaEsperada);
+		webClient.get().uri("/assuntos").exchange().expectBodyList(Assunto.class).isEqualTo(listaEsperada);
 	}
 
 	@Test
@@ -101,43 +88,30 @@ public class AssuntoControllerTests {
 		var assuntoEsperado = new Assunto();
 		when(service.buscarPorId(id)).thenReturn(Optional.of(assuntoEsperado));
 
-		webClient.get()
-		    .uri("/assuntos/" + id)
-		    .exchange()
-		    .expectBody(Assunto.class)
-            .isEqualTo(assuntoEsperado);
+		webClient.get().uri("/assuntos/" + id).exchange().expectBody(Assunto.class).isEqualTo(assuntoEsperado);
 	}
 
 	@Test
-	public void postReturnCREATED(){
+	public void postReturnCREATED() {
 		var assunto = new Assunto();
 
-		webClient.post()
-		.uri("/assuntos")
-		.bodyValue(assunto)
-		.exchange()
-		.expectStatus().isCreated();
+		webClient.post().uri("/assuntos").bodyValue(assunto).exchange().expectStatus().isCreated();
 	}
 
 	@Test
-	public void getReturnACCEPTED(){
+	public void getReturnACCEPTED() {
 
-		webClient.get()
-		.uri("/assuntos")
-		.exchange()
-		.expectStatus().isAccepted();
+		webClient.get().uri("/assuntos").exchange().expectStatus().isAccepted();
 	}
 
 	@Test
-	public void getPorIdReturnOK(){
+
+	public void getPorIdReturnOK() {
 
 		var id = 1L;
 		var assunto = new Assunto();
 		when(service.buscarPorId(id)).thenReturn(Optional.of(assunto));
 
-		webClient.get()
-		.uri("/assuntos/" + id)
-		.exchange()
-		.expectStatus().isOk();
+		webClient.get().uri("/assuntos/" + id).exchange().expectStatus().isOk();
 	}
 }

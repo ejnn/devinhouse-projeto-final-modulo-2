@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import devinhouse.elm.projetofinal.repositories.AssuntoRepository;
 import devinhouse.elm.projetofinal.model.Assunto;
 
-
 @Service
 public class AssuntoService {
 
@@ -17,7 +16,6 @@ public class AssuntoService {
     public AssuntoService(AssuntoRepository repository) {
         this.repository = repository;
     }
-
 
     public Assunto cadastrar(Assunto assunto) {
         return repository.save(assunto);
