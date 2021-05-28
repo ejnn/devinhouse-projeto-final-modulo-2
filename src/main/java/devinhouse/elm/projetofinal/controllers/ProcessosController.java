@@ -51,4 +51,10 @@ public class ProcessosController {
     public List<Processo> getPorChave(@RequestParam String chave) {
 	return service.buscarPorChave(chave);
     }
+
+    @GetMapping(params = "assuntoId")
+    @ResponseStatus(OK)
+    public List<Processo> getPorAssuntoId(@RequestParam long assuntoId) {
+	return service.buscarPorAssuntoId(assuntoId);
+    }
 }

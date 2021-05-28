@@ -114,4 +114,16 @@ public class ProcessosServiceTests {
 
 	verify(repository).findByChaveContains(chave);
     }
+
+    @Test
+    public void buscarPorAssuntoId() {
+
+	var assuntoId = 1l;
+	var listaEsperada = List.of(new Processo());
+	when(repository.findByAssuntoId(assuntoId)).thenReturn(listaEsperada);
+
+	var listaRecebida = service.buscarPorAssuntoId(assuntoId);
+
+	assertEquals(listaEsperada, listaRecebida);
+    }
 }

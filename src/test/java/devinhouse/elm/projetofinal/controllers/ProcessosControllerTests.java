@@ -131,4 +131,20 @@ public class ProcessosControllerTests {
 	    .expectBody(new ParameterizedTypeReference<List<Processo>>() {}).isEqualTo(listaEsperada);
 	    
     }
+
+    @Test
+    public void getPorAssuntoId() {
+
+    	var assuntoId = 1l;
+    	var listaEsperada = List.of(new Processo());
+    	when(service.buscarPorAssuntoId(assuntoId)).thenReturn(listaEsperada);
+
+    	var resposta = webClient.get()
+    	    .uri("/processos?assuntoId=" + assuntoId)
+    	    .exchange();
+
+    	resposta
+    	    .expectStatus().isOk()
+    	    .expectBody(new ParameterizedTypeReference<List<Processo>>() {}).isEqualTo(listaEsperada);
+    }
 }
