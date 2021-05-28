@@ -24,5 +24,6 @@ public class Processo {
     @Column(name = "CHAVEPROCESSO", length = 250, unique = true, nullable = false) private String chave;
     @Column(name = "DESCRICAO", length = 250, nullable = false) private String descricao;
     @JoinColumn(name = "CDASSUNTO", updatable = false, nullable = false) @ManyToOne(fetch = EAGER) private Assunto assunto;
+    @JoinColumn(name = "CDINTERESSADO", updatable = false, nullable = false) @ManyToOne private Interessado interessado;
     // TO DO: campos com assunto e interessados
 }
