@@ -25,9 +25,6 @@ public class AssuntoServiceTests {
 	@InjectMocks
 	private AssuntoService service;
 
-	@Autowired
-	private AssuntoService service;
-
 	@Test
 	public void cadastrar() {
 
